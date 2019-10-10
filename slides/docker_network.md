@@ -7,7 +7,7 @@
 Чтобы создать сеть достаточно выполнить команду 
 
 <pre>
-docker network create -d bridge ivi_network
+docker network create -d bridge proj_network
 </pre>
 
 В данной команде `bridge` - это тип драйвера для сети. У докера есть и [другие типы драйверов](https://blog.docker.com/2016/12/understanding-docker-networking-drivers-use-cases/), обсуждение их различиий выходит за пределы данного воркшопа.
@@ -20,7 +20,7 @@ docker network create -d bridge ivi_network
 Результат работы команды
 <pre>
 NETWORK ID          NAME                        DRIVER              SCOPE
-8fa50d79adf1        ivi_network            bridge              local
+8fa50d79adf1        proj_network            bridge              local
 </pre>
 
 Готово! Теперь мы знаем, как создать сеть между контейнерами. Осталось научиться [использовать эту сеть](./container_connection.md)

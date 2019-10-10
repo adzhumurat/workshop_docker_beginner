@@ -1,35 +1,35 @@
 version: '2'
 services:
-  postgres_ivi:
+  postgres_proj:
     image: postgres:10-alpine
     restart: always
     ports: ["5433:5432"]
-    container_name: postgres_ivi
+    container_name: postgres_proj
     networks:
-      ivi_network:
+      proj_network:
         aliases:
-          - postgres_ivi
+          - postgres_proj
     volumes:
       - ${SOURCE_DATA}/pg_data:/var/lib/postgresql/data
   pg-cli:
     build:
       context: ./data_client
     depends_on:
-      - postgres_ivi
+      - postgres_proj
     environment:
-      - APP_POSTGRES_HOST=postgres_ivi
+      - APP_POSTGRES_HOST=postgres_proj
       - APP_POSTGRES_USER=postgres
     volumes:
       - "${SOURCE_DATA}/raw_data:/usr/share/raw_data"
       - "./data_client/pg_client:/srv/pg_client"
     networks:
-      - ivi_network
+      - proj_network
     container_name: pg-cli
     ports:
         - "8889:8888"
 
 networks:
-  ivi_network:
+  proj_network:
     driver: bridge
     driver_opts:
       com.docker.network.driver.mtu: 1450

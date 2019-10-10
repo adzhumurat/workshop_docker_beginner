@@ -4,14 +4,14 @@
 
 ## Клиент-серверное взаимодействие с Postgres
 
-Для тренировки создадим два контейнера: Postgres-сервер и Postgres-клиент, объединив их с помощью сети `ivi_network`.
+Для тренировки создадим два контейнера: Postgres-сервер и Postgres-клиент, объединив их с помощью сети `proj_network`.
 
 ### Шаг 1. Запускаем Postgres-сервер
 
 Подходящий мне легковесный контейнер я нашёл на [docker hub](https://hub.docker.com/_/postgres)
 
 <pre>
-docker run --name ivi-postgres --network ivi_network -v "${SOURCE_DATA}/pg_data:/var/lib/postgresql/data" -d postgres:10-alpine
+docker run --name proj-postgres --network proj_network -v "${SOURCE_DATA}/pg_data:/var/lib/postgresql/data" -d postgres:10-alpine
 </pre>
 
 Обратите внимание на опцию `-v` - мы монтируем директорию с локальной машины `${SOURCE_DATA}/pg_data` во внутреннию директорию контейнера `/var/lib/postgresql/data`.
@@ -26,11 +26,11 @@ docker run --name ivi-postgres --network ivi_network -v "${SOURCE_DATA}/pg_data:
 Обратите внимание, что мы маунтим директорию с данными 
 
 <pre>
-docker run -it --rm  --network ivi_network -v "${SOURCE_DATA}/raw_data:/usr/share/raw_data" postgres:10-alpine psql -h ivi-postgres -U postgres
+docker run -it --rm  --network proj_network -v "${SOURCE_DATA}/raw_data:/usr/share/raw_data" postgres:10-alpine psql -h proj-postgres -U postgres
 </pre>
 
 Когда поднимали Postgres-сервер, то ограничились названием образа, который хотим использовать.
-Обратите внимание, что сейчас кроме названия образа в `run` добавился вызов бинарника постгрес-клиента `psql -h ivi-postgres -U postgres`.
+Обратите внимание, что сейчас кроме названия образа в `run` добавился вызов бинарника постгрес-клиента `psql -h proj-postgres -U postgres`.
 Кроме того, пропала опция `-d` - мы не хотим отключаться от терминала контейнера, мы хотим интерактивный сеанс.
 
 ### Шаг 3. Пишем SQL через клиента
@@ -55,7 +55,7 @@ CREATE TABLE ratings (userId bigint, movieId bigint, rating float(25), timestamp
 Осталось проверить, что обмана нет и файл действительно загрузился. Для чистоты эксперимента закройте терминал с докер-клиентом и выполните на хост-машине команду
 
 <pre>
-docker run -it --rm  --network ivi_network postgres:10-alpine psql -h ivi-postgres -U postgres -с "SELECT COUNT(*) FROM ratings;"
+docker run -it --rm  --network proj_network postgres:10-alpine psql -h proj-postgres -U postgres -с "SELECT COUNT(*) FROM ratings;"
 </pre>
 
 Вы должны увидеть в консоли результат запроса - количество строк в свежесозданной таблице.

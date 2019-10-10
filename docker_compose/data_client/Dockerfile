@@ -2,7 +2,7 @@ FROM ubuntu:18.04
 
 # сборка контейнера: docker build -t pg_client:latest .
 # запуск
-# подключение в sh: docker run --volume $(pwd)/pg_client:/srv/pg_client --network ivi_network -it --rm pg_client:latest bash
+# подключение в sh: docker run --volume $(pwd)/pg_client:/srv/pg_client --network proj_network -it --rm pg_client:latest bash
 
 RUN apt-get update && \
     apt-get install -y curl nano python3-pip python3.6 python3.6-dev wget && \
