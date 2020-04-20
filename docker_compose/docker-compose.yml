@@ -3,14 +3,14 @@ services:
   postgres_proj:
     image: postgres:10-alpine
     restart: always
-    ports: ["5433:5432"]
+    ports: ["5434:5432"]
     container_name: postgres_proj
     networks:
       proj_network:
         aliases:
           - postgres_proj
     volumes:
-      - ${SOURCE_DATA}/pg_data:/var/lib/postgresql/data
+      - "${SOURCE_DIR}/../data_store/pg_data:/var/lib/postgresql/data"
   pg-cli:
     build:
       context: ./data_client
@@ -20,7 +20,7 @@ services:
       - APP_POSTGRES_HOST=postgres_proj
       - APP_POSTGRES_USER=postgres
     volumes:
-      - "${SOURCE_DATA}/raw_data:/usr/share/raw_data"
+      - "${SOURCE_DIR}/../data_store/raw_data:/usr/share/raw_data"
       - "./data_client/pg_client:/srv/pg_client"
     networks:
       - proj_network

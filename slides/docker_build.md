@@ -21,7 +21,7 @@
 
 ## Запуск контейнеров
 
-Чтобы собрать контейнер из образа, перейдите в директорию `data_client` и выполните команду
+Чтобы собрать контейнер из образа, перейдите в директорию `docker_compose/data_client` и выполните команду
 <pre>
 docker build -t pg_client:1.0 .
 </pre>
@@ -29,12 +29,21 @@ docker build -t pg_client:1.0 .
 После того, как сборка будет завершена, подключитеcь в контейнер
 
 <pre>
-docker run --volume $(pwd)/pg_client:/srv/pg_client --network proj_network -it --rm pg_client:1.0 bash
+docker run \
+        --volume "$(pwd)/pg_client:/srv/pg_client" \
+        --network proj_network \
+        -it --rm pg_client:1.0 \
+        bash
 </pre>
 
 Отключитесь от контейнера и проверьте работу `docker-entrypoint.sh` запустив команду
 <pre>
-docker run -v $(pwd)/pg_client:/srv/pg_client -v ${SOURCE_DATA}/raw_data:/usr/share/raw_data -e APP_POSTGRES_HOST=proj-postgres --network proj_network -it --rm pg_client:1.0 load
+docker run -v "$(pwd)/pg_client:/srv/pg_client" \
+           -v "$(pwd)/../../data_store/raw_data:/usr/share/raw_data" \
+           -e APP_POSTGRES_HOST=proj-postgres \
+           --network proj_network \
+           -it --rm pg_client:1.0 \
+           load
 </pre>
 
 Ожидаемый результат - в консоли побегут логи загрузки данных

@@ -6,7 +6,7 @@
 
 Утилита конфигурируется с помощью yml-файлов. В репозитории присутствует файл [docker-compose.yml](../docker_compose/)
 
-Сборку контейнера запускаем в виде
+Для начала перейдём в директорию `docker_compose` и запустим сборку контейнера в виде
 
 <pre>
 docker-compose --project-name data-client -f docker-compose.yml build pg-cli
@@ -15,13 +15,13 @@ docker-compose --project-name data-client -f docker-compose.yml build pg-cli
 После сборки нужно инициировать загрузку данных
 
 <pre>
-docker-compose --project-name data-cli -f docker-compose.yml run --rm --name pg-cli pg-cli load
+SOURCE_DIR=$(pwd) docker-compose --project-name data-cli -f docker-compose.yml run --rm --name pg-cli pg-cli load
 </pre>
 
 Проверим, что данные успешно загрузились
 
 <pre>
-docker-compose --project-name data-cli -f docker-compose.yml run --name pg-client --rm pg-cli psql -h postgres_proj -U postgres -c "SELECT COUNT(*) FROM ratings;"
+SOURCE_DIR=$(pwd) docker-compose --project-name data-cli -f docker-compose.yml run --name pg-client --rm pg-cli psql -h postgres_proj -U postgres -c "SELECT COUNT(*) FROM ratings;"
 </pre>
 
 Ожидаемый результат
