@@ -1,1 +1,4 @@
 .idea/
+data_store/raw_data
+data_store/pg_data
+data_store/mongo_data
