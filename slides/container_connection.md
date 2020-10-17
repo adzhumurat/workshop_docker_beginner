@@ -11,8 +11,9 @@
 Подходящий мне легковесный контейнер я нашёл на [docker hub](https://hub.docker.com/_/postgres)
 
 <pre>
-docker run --name proj-postgres \
+docker run --rm --name proj-postgres \
            --network proj_network \
+           -e POSTGRES_PASSWORD=mypass \
            -v "$(pwd)/data_store/pg_data:/var/lib/postgresql/data" \
            -d postgres:10-alpine
 </pre>
