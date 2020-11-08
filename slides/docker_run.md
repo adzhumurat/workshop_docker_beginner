@@ -3,9 +3,9 @@
 ## Основные концепции
 
 Простая команда:
-<pre>
+```shell script
 docker run hello-world:latest
-</pre>
+```
 
 Docker-демон выполняет следующие шаги:
 * скачивает образ из registry (в нашем случае docker-hub)
@@ -20,15 +20,15 @@ Docker-демон выполняет следующие шаги:
 * подключается в контейнер и логирует stdin, stdout, stderr в докер-клиент
 
 Docker представляет огромное количество команд для интроспекции, и первая из таких команд - команда `ls`, которая позволяет проверить список доступных контейнеров
-<pre>
+```shell script
 docker container ls -a
-</pre>
+```
 
 Результат работы команды - контейнеры, доступные в системе, в т.ч. контейнер `hello-world`, который вы только что запустили
-<pre>
+```shell script
 CONTAINER ID        IMAGE                COMMAND                  CREATED             STATUS                      PORTS                    NAMES
 3fe7c1a64157        hello-world:latest   "/hello"                 27 seconds ago      Exited (0) 26 seconds ago                            compassionate_buck
-</pre>
+```
 
 Команда `docker run` умеет принимать огромное количество аргументов, которые параметризуют запуск контейнера - давайте узнаем, как именно.
 
@@ -38,20 +38,20 @@ CONTAINER ID        IMAGE                COMMAND                  CREATED       
 
 Запустить контейнер с сервисом Postgres командой 
 
-<pre>
-docker run --name pg-server -d postgres:10-alpine
-</pre>
+```shell script
+docker run --rm --name pg-server -e POSTGRES_PASSWORD=password -d postgres:10-alpine
+```
 
 Проверим, что контейнер успешно поднялся с помощью утилиты `docker ps`, в консоли должны увидеть сообщение о том, что контейнер запущен:
-<pre>
+```shell script
 CONTAINER ID        IMAGE                COMMAND                  CREATED             STATUS              PORTS                      NAMES
 da1f19e29dcd        postgres:10-alpine   "docker-entrypoint.s…"   7 seconds ago       Up 5 seconds        5432/tcp                   pg-server
-</pre>
+```
 
 Мы использовали следующие параметры
 
 * `--name` чтобы дать осмысленное имя запускаемому контейнеру
-* `--detach` чтобы не засорять stdout вашей хост-системы логами контейнера
+* `-d` чтобы не засорять stdout вашей хост-системы логами контейнера
 
 Чтобы остановить или удалить контейнер, скопируйте `CONTAINER ID` из первого столбца таблицы.
 

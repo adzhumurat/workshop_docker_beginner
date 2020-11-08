@@ -10,13 +10,13 @@
 
 Подходящий мне легковесный контейнер я нашёл на [docker hub](https://hub.docker.com/_/postgres)
 
-<pre>
+```shell script
 docker run --rm --name proj-postgres \
            --network proj_network \
            -e POSTGRES_PASSWORD=mypass \
            -v "$(pwd)/data_store/pg_data:/var/lib/postgresql/data" \
            -d postgres:10-alpine
-</pre>
+```
 
 Обратите внимание на опцию `-v` - мы монтируем директорию с локальной машины `${SOURCE_DATA}/pg_data` во внутреннию директорию контейнера `/var/lib/postgresql/data`.
 Эта директория примечательная тем, что в ней Postgres-сервер будет хранить свои мета-данные, в том числе - таблицы в бинарном формате. Мы **не хотим** хранить лишние данные внутри контейнера!
@@ -29,12 +29,13 @@ docker run --rm --name proj-postgres \
 
 Обратите внимание, что мы маунтим директорию с данными 
 
-<pre>
+```shell script
 docker run -it --rm  \
-            --network proj_network -v "$(pwd)/raw_data:/usr/share/raw_data" \
+            --network proj_network -v "$(pwd)/data_store/raw_data:/usr/share/raw_data" \
+           -e PGPASSWORD=mypass \
             postgres:10-alpine \
             psql -h proj-postgres -U postgres
-</pre>
+```
 
 Когда поднимали Postgres-сервер, то ограничились названием образа, который хотим использовать.
 Обратите внимание, что сейчас кроме названия образа в `run` добавился вызов бинарника постгрес-клиента `psql -h proj-postgres -U postgres`.
@@ -48,24 +49,28 @@ docker run -it --rm  \
 
 Начнём с того, что создадим таблицу, куда будем заливать csv файл
 
-<pre>
+```sql
 CREATE TABLE ratings (userId bigint, movieId bigint, rating float(25), timestamp bigint);
-</pre>
+```
 
 Далее волшебство докера - вызываем команду `\copy` из `psql`:
 
-<pre>
+```sql
 \copy ratings FROM '/usr/share/raw_data/ratings.csv' DELIMITER ',' CSV HEADER;
-</pre>
+```
 
 Обратите внимание на путь до файла - эта директория **внутри** контейнера с постгрес-клиентом.
 Но сам файл `ratings.csv` лежит на вашей локальной хост-машине в директории `data_store/raw_data`!
 
 Осталось проверить, что обмана нет и файл действительно загрузился. Для чистоты эксперимента закройте терминал с докер-клиентом и выполните на хост-машине команду
 
-<pre>
-docker run -it --rm  --network proj_network postgres:10-alpine psql -h proj-postgres -U postgres -c "SELECT COUNT(*) FROM ratings;"
-</pre>
+```shell script
+docker run -it  \
+  -e PGPASSWORD=mypass \
+  --rm  --network proj_network \
+  postgres:10-alpine \
+  psql -h proj-postgres -U postgres -c "SELECT COUNT(*) FROM ratings;"
+```
 
 Вы должны увидеть в консоли результат запроса - количество строк в свежесозданной таблице.
 

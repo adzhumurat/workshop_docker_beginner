@@ -8,9 +8,9 @@
 * Если у вас Windows, то для установки `docker toolbox` нужно использовать вот [эту инструкцию](https://docs.docker.com/toolbox/toolbox_install_windows/) и затем [установить сам docker](https://docs.docker.com/docker-for-windows/install/)
 
 Когда docker будет установлен, проверьте его работу командой
-<pre>
+```shell script
 docker run hello-world
-</pre>
+```
 
 Если не работает, или работает только с `sudo` - продолжайте настраивать. Когда заработает - можно переходить к загрузке исходных данных.
 
@@ -22,28 +22,28 @@ docker run hello-world
 
 Файлы должны быть извлечены в директорию `data_store/raw_data`. Это можно сделать вручную, либо запустив скрипт
 
-```code shell
+```shell script
 python3 -m data_tools
 ```
 
-<pre>
+```shell script
 ls data_store
-</pre>
+```
 
 Результат работы команды
-<pre>
+```shell script
 raw_data, pg_data, mongo_data
-</pre>
+```
 
 Проверьте корректность распаковки с помощью команды
 
-<pre>
-ls raw_data/raw_data
-</pre> 
+```shell script
+ls data_store/raw_data
+```
 
 Результат работы команды
-<pre>
+```shell script
 links.csv ratings.csv tags.json
-</pre>
+```
 
 Если данные в директории есть - поздравляю, вы полностью готовы к участию в воркшопе! Перед началом практики познакомимся с [основными концепциями Docker](./docker_intro.md).

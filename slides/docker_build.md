@@ -22,32 +22,33 @@
 ## Запуск контейнеров
 
 Чтобы собрать контейнер из образа, перейдите в директорию `docker_compose/data_client` и выполните команду
-<pre>
+
+```shell script
 docker build -t pg_client:1.0 .
-</pre>
+```
 
 После того, как сборка будет завершена, подключитеcь в контейнер
 
-<pre>
+```shell script
 docker run \
         --volume "$(pwd)/pg_client:/srv/pg_client" \
         --network proj_network \
         -it --rm pg_client:1.0 \
         bash
-</pre>
+```
 
 Отключитесь от контейнера и проверьте работу `docker-entrypoint.sh` запустив команду
-<pre>
+```shell script
 docker run -v "$(pwd)/pg_client:/srv/pg_client" \
            -v "$(pwd)/../../data_store/raw_data:/usr/share/raw_data" \
            -e APP_POSTGRES_HOST=proj-postgres \
            --network proj_network \
            -it --rm pg_client:1.0 \
            load
-</pre>
+```
 
 Ожидаемый результат - в консоли побегут логи загрузки данных
-<pre>
+```shell script
 DROP TABLE
 DROP TABLE
 Загружаем links.csv...
@@ -56,7 +57,7 @@ COPY 45843
 Загружаем ratings.csv...
 CREATE TABLE
 COPY 777776
-</pre>
+```
 
 Мы научились собирать кастомные контейнеры с помощью `docker build` и модифицировать поведение контейнеров в `docker-entrypoint.sh`
 Однако поднимать вручную десятки контейнеров не очень удобно, возникает желание как-то автоматизировать этот процесс - давайте воспользуемся предназначенной для этих целей [утилитой docker-compose](../docker_compose/docker_compose.md)
