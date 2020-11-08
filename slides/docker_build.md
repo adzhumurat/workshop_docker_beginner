@@ -37,10 +37,11 @@ docker run \
         bash
 ```
 
-Отключитесь от контейнера и проверьте работу `docker-entrypoint.sh` запустив команду
+Отключитесь от контейнера c с помощью комбинации `Ctrl-D` и проверьте работу `docker-entrypoint.sh` запустив команду
 ```shell script
 docker run -v "$(pwd)/pg_client:/srv/pg_client" \
            -v "$(pwd)/../../data_store/raw_data:/usr/share/raw_data" \
+           -e PGPASSWORD=mypass \
            -e APP_POSTGRES_HOST=proj-postgres \
            --network proj_network \
            -it --rm pg_client:1.0 \
